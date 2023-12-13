@@ -1,13 +1,18 @@
 from modules import functions_for_app1
 import PySimpleGUI as psg
 import time
+import os
 
-psg.theme("DarkPurple4")
+if not os.path.exists("files/todos.txt"):
+    with open("files/todos.txt", "w") as file:
+        pass
+
+psg.theme("Black")
 
 clock = psg.Text("", key="clock")
 label = psg.Text("Type in a to-do")
 input_box = psg.InputText(tooltip="Enter todo", key="input_key") #output when ADD pressed: ('Add', {'todo_key': 'hello'})
-add_button = psg.Button("Add")
+add_button = psg.Button(key="Add", image_source="files/add.png", size=5, mouseover_colors="Yellow", tooltip="Add todo")
 list_box = psg.Listbox(values=functions_for_app1.get_todos(), key='list_box_key', enable_events=True, size=[44,10])
 edit_button = psg.Button("Edit")
 delete_button = psg.Button("Delete")
@@ -42,7 +47,7 @@ while True:
         try:
             todos = functions_for_app1.get_todos()
 
-            new_todo = values['input_key']
+            new_todo = values['input_key'] + "\n"
             index = todos.index(values['list_box_key'][0])
             todos.__setitem__(index, new_todo)
 
@@ -55,7 +60,7 @@ while True:
 
     elif event == "list_box_key":
         # Update the INPUT box to the value selected from the listbox
-        window['input_key'].update(value=values['list_box_key'][0])
+        window['input_key'].update(value=values['list_box_key'][0].strip("\n"))
 
     elif event == "Delete":
         try:
@@ -75,5 +80,8 @@ while True:
     elif event == psg.WIN_CLOSED:
         break
         #exit()
+
+    else:
+        continue
 
 window.close()
