@@ -47,5 +47,6 @@ while True:
 
     elif event == psg.WIN_CLOSED:
         break
+        #exit()
 
 window.close()
